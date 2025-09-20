@@ -77,6 +77,12 @@ class TypegroupsClassifier:
         # If trained with CUDA and loaded on a device without CUDA
         res.dev = torch.device(res.dev if torch.cuda.is_available() else "cpu")
         res.network.to(res.dev)
+        # --- Patch for old pickled models (AvgPool2d missing divisor_override) ---
+        from torch import nn
+        for m in res.network.modules():
+            if isinstance(m, nn.AvgPool2d) and not hasattr(m, 'divisor_override'):
+                m.divisor_override = None
+        # ------------------------------------------------------------------------
         return res
         
     def save(self, output):
