@@ -1,1 +1,3 @@
+See original repo: https://github.com/seuretm/printed-vs-handwritten
+
 Updated the model loading, so it works with newer torch versions.
